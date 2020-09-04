@@ -54,7 +54,7 @@ export default {
     const units = 'metric';
 
     const locality = await $axios.$get(
-      `http://api.openweathermap.org/data/2.5/weather?q=${params.locality}&appid=${key}&units=${units}`
+      `https://api.openweathermap.org/data/2.5/weather?q=${params.locality}&appid=${key}&units=${units}`
     );
     return { locality };
   },
