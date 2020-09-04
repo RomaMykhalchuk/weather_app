@@ -7,7 +7,7 @@
       {{ otherError }}
     </h1>
     <NuxtLink to="/">
-      Home page
+      Go to Home page
     </NuxtLink>
   </v-app>
 </template>
@@ -23,7 +23,7 @@ export default {
   },
   data () {
     return {
-      pageNotFound: '404 Not Found',
+      pageNotFound: 'Current location was not found',
       otherError: 'An error occurred'
     }
   },
@@ -38,7 +38,10 @@ export default {
 </script>
 
 <style scoped>
-h1 {
+h1,
+a {
   font-size: 20px;
+  text-align: center;
+  margin-top: 10px;
 }
 </style>
