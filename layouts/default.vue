@@ -1,10 +1,8 @@
 <template>
   <v-app>
     <Navbar />
-    <main>
-      <nuxt/>
-    </main>
-</v-app>
+    <nuxt />
+  </v-app>
 </template>
 
 <script>
@@ -14,5 +12,5 @@ export default {
   components: {
     Navbar,
   },
-}
+};
 </script>
