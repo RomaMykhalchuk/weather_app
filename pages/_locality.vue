@@ -1,4 +1,5 @@
 <template>
+<section>
   <v-card class="mx-auto" max-width="400">
     <v-list-item two-line>
       <v-list-item-content>
@@ -36,20 +37,7 @@
       <v-list-item-subtitle>{{locality.main.humidity}} %</v-list-item-subtitle>
     </v-list-item>
       <v-card-actions>
-      <v-btn
-        text
-        color="deep-purple accent-4"
-        @click="addToStorage"
-      >
-        Add to storage
-      </v-btn>
-          <v-btn
-        text
-        color="deep-purple accent-4"
-        @click="removeFromStorage"
-      >
-        Delete from storage
-      </v-btn>
+    
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon>mdi-heart</v-icon>
@@ -62,13 +50,24 @@
       I'm a success alert.
     </v-alert>
   </v-card>
+  <Datatable :location='locality'/>
+</section>
 </template>
 
 <script>
+
+import Datatable from '../components/Datatable';
+
 export default {
+  components: {
+    Datatable,
+  },
   async asyncData({ $axios, params }) {
+    const key = '269d45053fab4492a56e8e92e7805686';
+    const units = 'metric';
+
     const locality = await $axios.$get(
-      `http://api.openweathermap.org/data/2.5/weather?q=${params.locality}&appid=269d45053fab4492a56e8e92e7805686&units=metric`
+      `http://api.openweathermap.org/data/2.5/weather?q=${params.locality}&appid=${key}&units=${units}`
     );
     return { locality };
   },
