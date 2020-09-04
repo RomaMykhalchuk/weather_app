@@ -8,25 +8,23 @@
       class="elevation-1"
     >
       <template v-slot:top>
-        <v-toolbar flat color="white">
-          <v-btn color="primary" dark class="mb-2" @click="addToTable"
+        <v-toolbar flat color="white mb-2">
+          <v-btn color="warning dark mr-5" @click="addToTable"
             >Add to the table</v-btn
           >
-          <v-btn text color="deep-purple accent-4" @click="addToStorage">
-            Add to storage
+          <v-btn color="warning dark mr-5" @click="addToStorage">
+            Save to the storage
           </v-btn>
-          <v-btn text color="deep-purple accent-4" @click="removeFromStorage">
-            Delete from storage
-          </v-btn>
-          <!-- <v-btn color="pink" class="mb-2" @click="deleteItem">Delete</v-btn> -->
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
-        <v-icon large color="green darken-2" class="mr-2" @click="deleteItem(item)">
+      <template v-slot:item.tableDelete="{ item }">
+        <v-icon class="mr-2" color="red" @click="deleteItem(item)">
           mdi-delete
         </v-icon>
-        <v-icon small class="mr-2" @click="removeFromStorage(item)">
-          mdi-circle
+      </template>
+      <template v-slot:item.storageDelete="{ item }">
+        <v-icon class="mr-2" color="black" @click="removeFromStorage(item)">
+          mdi-delete
         </v-icon>
       </template>
     </v-data-table>
@@ -42,21 +40,33 @@ export default {
     headers: [
       { text: 'Location', value: 'name' },
       { text: 'Country', value: 'sys.country' },
-      { text: 'Temparature', value: 'main.temp' },
-      { text: 'Humidity', value: 'main.humidity' },
-      { text: 'Pressure', value: 'main.pressure' },
-      { text: 'Actions', value: 'actions' },
+      { text: 'Temparature, Celsius', value: 'main.temp' },
+      { text: 'Humidity, %', value: 'main.humidity' },
+      { text: 'Pressure, hPa', value: 'main.pressure' },
+      {
+        text: 'Actions (delete locally)',
+        value: 'tableDelete',
+        sortable: false,
+      },
+      {
+        text: 'Actions (delete from the storage)',
+        value: 'storageDelete',
+        sortable: false,
+      },
     ],
   }),
   mounted() {
     const locations = localStorage.getItem('locations')
       ? JSON.parse(localStorage.getItem('locations'))
       : [];
-    console.log(locations);
     this.locations = locations;
   },
   methods: {
     addToTable() {
+      if (this.locations.some((item) => item.name === this.location.name)) {
+        alert('This location has been already added');
+        return;
+      }
       this.locations.push(this.location);
     },
 
@@ -65,13 +75,11 @@ export default {
         ? JSON.parse(localStorage.getItem('locations'))
         : [];
       if (locations.some((item) => item.name === this.location.name)) {
-        alert('This locality has been already added');
-        this.$router.push('/');
+        alert('This location has been already added');
         return;
       }
       locations.push(this.location);
       localStorage.locations = JSON.stringify(locations);
-      // this.locations.push(this.location);
       this.addToTable();
     },
 
@@ -88,7 +96,7 @@ export default {
         ? JSON.parse(localStorage.getItem('locations'))
         : [];
       const currentIndex = locations.findIndex(
-        (currentItem) => currentItem.name === locations.name
+        (currentItem) => currentItem.name === item.name
       );
       confirm('Are you sure you want to delete this item?') &&
         locations.splice(currentIndex, 1);
